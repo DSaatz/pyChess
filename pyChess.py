@@ -1,0 +1,57 @@
+import chess
+from stockfish import Stockfish
+
+def main():
+    # Initialize the board and Stockfish engine
+    board = chess.Board()
+    stockfish = Stockfish(path="stockfish\stockfish-windows-x86-64-avx2.exe")
+
+    print("Welcome to the CLI Chess Game!")
+    print("You are playing as white. Enter your moves in algebraic notation (e.g., e2e4).")
+
+    while not board.is_game_over():
+        # Display the board
+        print(board)
+
+        # Get the player's move
+        player_move = input("Your move: ")
+
+        # Validate the move
+        try:
+            move = chess.Move.from_uci(player_move)
+            if move in board.legal_moves:
+                board.push(move)
+            else:
+                print("Invalid move. Please try again.")
+                continue
+        except:
+            print("Invalid format. Please enter your move in UCI format (e.g., e2e4).")
+            continue
+
+        # Check if the game is over after the player's move
+        if board.is_game_over():
+            break
+
+        # Set the position for Stockfish
+        stockfish.set_fen_position(board.fen())
+
+        # Get the best move from Stockfish
+        engine_move = stockfish.get_best_move()
+
+        # Make Stockfish's move
+        board.push(chess.Move.from_uci(engine_move))
+        print(f"Stockfish's move: {engine_move}")
+
+    # Game over message
+    print(board)
+    if board.is_checkmate():
+        print("Checkmate! You lost.")
+    elif board.is_stalemate():
+        print("Stalemate!")
+    elif board.is_insufficient_material():
+        print("Draw due to insufficient material!")
+    else:
+        print("Game over!")
+
+if __name__ == "__main__":
+    main()
