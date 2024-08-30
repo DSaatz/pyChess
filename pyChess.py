@@ -10,8 +10,8 @@ PIECE_UNICODE = {
 
 def print_ascii_board(board):
     board_str = str(board)
-    print("\n    a b c d e f g h")
-    print("  +-----------------+")
+    print("\n    a   b   c   d   e   f   g   h")
+    print("  +-------------------------------+")
 
     rows = board_str.split('\n')
     for i, row in enumerate(rows):
@@ -20,8 +20,8 @@ def print_ascii_board(board):
             print(PIECE_UNICODE.get(square, square), end=" ")
         print(f"| {8 - i}")
 
-    print("  +-----------------+")
-    print("    a b c d e f g h\n")
+    print("  +-------------------------------+")
+    print("    a   b   c   d   e   f   g   h\n")
 
 def main():
     # Initialize the board and Stockfish engine
